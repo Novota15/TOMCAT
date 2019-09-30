@@ -1,5 +1,6 @@
 #!/bin/bash
 
+dnf -y install epel-release
 dnf -y install git
 dnf -y install curl
 # install rust/rustup
@@ -11,7 +12,7 @@ rustup component add rustfmt
 
 dnf -y install gcc
 dnf -y install pkg-config
-dnf -y install openssl-devel
+dnf -y install openssl-devel.x86_64
 dnf -y install sqlite libsqlite3-devel
 #dnf -y install python3.7 python3-pip
 pip3 install toml mock responses
