@@ -1,0 +1,56 @@
+#!/bin/bash
+# Author: Lucas Perry
+# Date: October 09 2019
+# Purpose: Shows how to test telemetry using kubOS and querying GraphQL
+# Note: Must have kubOS installed beforehand
+
+
+echo
+
+git clone https://github.com/kubos/kubos
+
+cd kubos/
+
+cargo run --bin telemetry-service -- -c tools/default_config.toml &
+
+cd --
+
+# Write Mutations to the GraphQL
+curl 0.0.0.0:8002 -H "Content-Type: application/json" --data "{\"query\":\"mutation {insert(subsystem:\\\"OBC\\\",parameter:\\\"voltage\\\",value:\\\"5.0\\\"){success}}\"}"
+
+curl 0.0.0.0:8002 -H "Content-Type: application/json" --data "{\"query\":\"mutation {insert(subsystem:\\\"OBC\\\",parameter:\\\"current\\\",value:\\\"0.1\\\"){success}}\"}"
+
+#Open your web browser and type http://0.0.0.0:8002/graphiql but replace 0.0.0.0 with your IP address (go to System Preferences > Network > Look under status to find IP)
+
+#In the Graphql enter 
+
+
+# {
+#   telemetry(subsystem: "OBC") {
+#     timestamp
+#     subsystem
+#     parameter
+#     value
+#   }
+# }
+
+# …you should get a response like
+
+# {
+#   "data": {
+#     "telemetry": [
+#       {
+#         "timestamp": 1570567581.366763,
+#         "subsystem": "OBC",
+#         "parameter": "voltage",
+#         "value": "5.0"
+#       },
+#       {
+#         "timestamp": 1570567579.125894,
+#         "subsystem": "OBC",
+#         "parameter": "current",
+#         "value": "0.1"
+#       }
+#     ]
+#   }
+# }
